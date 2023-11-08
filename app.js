@@ -1,3 +1,22 @@
+// * Select the abc-wrap div
+const abcWrap = document.querySelector(".abc-wrap");
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+let newDiv;
+// * Create an array from the alphabet string and iterate over it
+Array.from(alphabet).forEach((letter) => {
+   // * Create a new div
+   newDiv = document.createElement("div");
+
+   // * Add the class 'col' to the new div
+   newDiv.classList.add("abc", "col", "border", "rounded", "py-0", "mw-2");
+
+   // * Set the inner text of the new div to the current letter
+   newDiv.innerText = letter;
+
+   // * Append the new div to the abc-wrap div
+   abcWrap.appendChild(newDiv);
+});
+
 // * fetch by alcoholic or non alcoholic or optional alcohol
 function searchByAlcoholType() {
    const val = document.querySelector("input").value;
@@ -26,13 +45,18 @@ function searchByAlcoholType() {
 
 // * function to filter by button press
 
-const filterBy = (val, x) => {
+const filterBy = (val, x, filter) => {
    // * takes value from created button as filter and replaces space if exist
    // * then fetch data to DOM
    val = val.replace(/\s+/g, "_");
 
    fetch(
-      "https://www.thecocktaildb.com/api/json/v1/1/filter.php?" + x + "=" + val
+      "https://www.thecocktaildb.com/api/json/v1/1/" +
+         filter +
+         ".php?" +
+         x +
+         "=" +
+         val
    )
       .then((resp) => resp.json())
       .then((resp) => {
@@ -52,6 +76,15 @@ const filterBy = (val, x) => {
             .join("");
       });
 };
+
+// *selects all created abc and on click calls function to search by pressed letter
+const allAbc = document.querySelectorAll(".abc");
+allAbc.forEach((abc) => {
+   abc.addEventListener("click", (e) => {
+      let val = e.target.innerText;
+      filterBy(val, "f", "search");
+   });
+});
 
 // * function to create single cocktail item to DOM
 const printToDOM = (drink, ingredients) => {
@@ -99,21 +132,21 @@ const printToDOM = (drink, ingredients) => {
    const btnType = document.querySelector(".btn-type");
    btnType.addEventListener("click", (e) => {
       let val = e.target.innerText;
-      filterBy(val, "a");
+      filterBy(val, "a", "filter");
    });
 
    // * filter by pressing filter # category
    const btnCat = document.querySelector(".btn-cat ");
    btnCat.addEventListener("click", (e) => {
       let val = e.target.innerText;
-      filterBy(val, "c");
+      filterBy(val, "c", "filter");
    });
 
    // * filter by pressing filter # glass
    const btnGlass = document.querySelector(".btn-glass ");
    btnGlass.addEventListener("click", (e) => {
       let val = e.target.innerText;
-      filterBy(val, "g");
+      filterBy(val, "g", "filter");
    });
 };
 
