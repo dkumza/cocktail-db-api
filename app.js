@@ -24,6 +24,35 @@ function searchByAlcoholType() {
       });
 }
 
+// * function to filter by button press
+
+const filterBy = (val, x) => {
+   // * takes value from created button as filter and replaces space if exist
+   // * then fetch data to DOM
+   val = val.replace(/\s+/g, "_");
+
+   fetch(
+      "https://www.thecocktaildb.com/api/json/v1/1/filter.php?" + x + "=" + val
+   )
+      .then((resp) => resp.json())
+      .then((resp) => {
+         if (!resp.drinks) return;
+
+         document.querySelector(".result").innerHTML = resp.drinks
+            .map(
+               (drink) => `
+                  <div class="cocktail col-4  border rounded p-4 hover" onclick="showCocktail(${drink.idDrink})">
+                     <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" />
+                     <div class="d-flex justify-content-between align-content-center align-items-center mt-2">
+                        <h3 class="mb-0">${drink.strDrink}</h3>   
+                        
+                     </div>
+                  </div> `
+            )
+            .join("");
+      });
+};
+
 // * function to create single cocktail item to DOM
 const printToDOM = (drink, ingredients) => {
    document.querySelector(".result").innerHTML = `
@@ -66,33 +95,25 @@ const printToDOM = (drink, ingredients) => {
       ? imgAtr.classList.add("hide")
       : imgAtr.classList.remove("hide");
 
-   //   * select buttons to filter cocktails  by pressing filters
+   //   * select buttons to filter cocktails by pressing filters - #alcoholic / non-alc / optional-alc
    const btnType = document.querySelector(".btn-type");
    btnType.addEventListener("click", (e) => {
-      let alcValue = e.target.innerText;
-      alcValue = alcValue.replace(/\s+/g, "_");
-      console.log(alcValue);
+      let val = e.target.innerText;
+      filterBy(val, "a");
+   });
 
-      fetch(
-         "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=" + alcValue
-      )
-         .then((resp) => resp.json())
-         .then((resp) => {
-            if (!resp.drinks) return;
+   // * filter by pressing filter # category
+   const btnCat = document.querySelector(".btn-cat ");
+   btnCat.addEventListener("click", (e) => {
+      let val = e.target.innerText;
+      filterBy(val, "c");
+   });
 
-            document.querySelector(".result").innerHTML = resp.drinks
-               .map(
-                  (drink) => `
-                  <div class="cocktail col-4  border rounded p-4 hover" onclick="showCocktail(${drink.idDrink})">
-                     <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" />
-                     <div class="d-flex justify-content-between align-content-center align-items-center mt-2">
-                        <h3 class="mb-0">${drink.strDrink}</h3>   
-                        
-                     </div>
-                  </div> `
-               )
-               .join("");
-         });
+   // * filter by pressing filter # glass
+   const btnGlass = document.querySelector(".btn-glass ");
+   btnGlass.addEventListener("click", (e) => {
+      let val = e.target.innerText;
+      filterBy(val, "g");
    });
 };
 
