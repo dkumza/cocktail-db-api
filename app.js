@@ -1,3 +1,10 @@
+let lastKey;
+let value;
+
+const checkLastKey = (key, value) => {
+   localStorage.setItem(key, value);
+};
+
 // * Select the abc-wrap div
 const abcWrap = document.querySelector(".abc-wrap");
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -26,6 +33,10 @@ function searchByAlcoholType() {
       .then((resp) => {
          if (!resp.drinks) return;
 
+         // * save fetch to localStorage
+         const toLocalStorage = JSON.stringify(resp.drinks);
+         checkLastKey("key", toLocalStorage);
+
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
                (drink) => `
@@ -44,7 +55,6 @@ function searchByAlcoholType() {
 }
 
 // * function to filter by button press
-
 const filterBy = (val, x, filter) => {
    // * takes value from created button as filter and replaces space if exist
    // * then fetch data to DOM
@@ -62,6 +72,11 @@ const filterBy = (val, x, filter) => {
       .then((resp) => {
          if (!resp.drinks) return;
 
+         // * save fetch to localStorage
+         const toLocalStorage = JSON.stringify(resp.drinks);
+         checkLastKey("key", toLocalStorage);
+         checkLastKey("mem", "byLetorCat");
+         // console.log(checkLastKey("cocktailsByLetter", toLocalStorage));
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
                (drink) => `
@@ -92,10 +107,10 @@ const printToDOM = (drink, ingredients) => {
             <div class="col-6">
                 <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" />
             </div>
-            <div class="col-6">
+            <div class="col-6 d-flex flex-column  align-items-start">
                 <h2>${drink.strDrink}</h2>
                 <p>${drink.strInstructions}</p>
-                <ul>
+                <ul class="d-flex flex-column  align-items-start">
                     <li> Type: <button class="btn-type btn btn-outline-success btn-sm"> ${
                        drink.strAlcoholic
                     }</button></li>
@@ -111,7 +126,7 @@ const printToDOM = (drink, ingredients) => {
                     }</li>
                 </ul>
                 <h4>Ingredients:</h4>
-                <ul>
+                <ul class="d-flex flex-column  align-items-start">
                     ${ingredients.join("")}
                 </ul>
             </div>
@@ -167,11 +182,17 @@ function searchCocktails(e) {
    e.preventDefault();
 
    const val = document.querySelector("input").value;
+   checkLastKey("inputVal", val);
 
    fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + val)
       .then((resp) => resp.json())
       .then((resp) => {
          if (!resp.drinks) return;
+
+         // * save fetch to localStorage
+         const toLocalStorage = JSON.stringify(resp.drinks);
+         checkLastKey("key", toLocalStorage);
+         checkLastKey("mem", "bySearch");
 
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
@@ -195,8 +216,15 @@ function showCocktail(id) {
    fetch("https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id)
       .then((resp) => resp.json())
       .then((resp) => {
+         if (!resp.drinks) return;
+
          const drink = resp.drinks[0];
          const ingredients = [];
+
+         // * save fetch to localStorage
+         const toLocalStorage = JSON.stringify(resp.drinks);
+         checkLastKey("key", toLocalStorage);
+         checkLastKey("mem", "byId");
 
          drinkIngredients(drink, ingredients);
 
@@ -213,6 +241,11 @@ function imLucky() {
       .then((resp) => {
          if (!resp.drinks) return;
 
+         // * save fetch to localStorage
+         const toLocalStorage = JSON.stringify(resp.drinks);
+         checkLastKey("key", toLocalStorage);
+         checkLastKey("mem", "byLucky");
+
          const drink = resp.drinks[0];
          const ingredients = [];
 
@@ -227,3 +260,14 @@ btnLucky.addEventListener("click", (e) => {
    e.preventDefault();
    imLucky();
 });
+
+window.onload = () => {
+   const getKeyData = localStorage.getItem("key");
+   console.log(JSON.parse(getKeyData));
+
+   const getKeyMem = localStorage.getItem("mem");
+   console.log(getKeyMem);
+
+   const getKeyVal = localStorage.getItem("inputVal");
+   console.log(getKeyVal);
+};
