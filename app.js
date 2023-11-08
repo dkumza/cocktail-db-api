@@ -1,3 +1,29 @@
+// * fetch by alcoholic or non alcoholic or optional alcohol
+function searchByAlcoholType() {
+   const val = document.querySelector("input").value;
+
+   fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + val)
+      .then((resp) => resp.json())
+      .then((resp) => {
+         if (!resp.drinks) return;
+
+         document.querySelector(".result").innerHTML = resp.drinks
+            .map(
+               (drink) => `
+            <div class="cocktail col-4  border rounded p-4 hover" onclick="showCocktail(${drink.idDrink})">
+                <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" />
+               
+                <div class="d-flex justify-content-between align-content-center align-items-center mt-2">
+                    <h3 class="mb-0">${drink.strDrink}</h3>   
+                    <h6 class="mb-0">${drink.strAlcoholic}</h6>
+                </div>
+            </div>
+        `
+            )
+            .join("");
+      });
+}
+
 // * function to create single cocktail item to DOM
 const printToDOM = (drink, ingredients) => {
    document.querySelector(".result").innerHTML = `
@@ -8,13 +34,13 @@ const printToDOM = (drink, ingredients) => {
                 <h2>${drink.strDrink}</h2>
                 <p>${drink.strInstructions}</p>
                 <ul>
-                    <li> Type: <button class="btn btn-outline-success btn-sm"> ${
+                    <li> Type: <button class="btn-type btn btn-outline-success btn-sm"> ${
                        drink.strAlcoholic
                     }</button></li>
-                    <li>Category: <button class="btn btn-outline-success btn-sm"> ${
+                    <li>Category: <button class="btn-cat btn btn-outline-success btn-sm"> ${
                        drink.strCategory
                     } </button></li>
-                    <li>Glass Type: <button class="btn btn-outline-success btn-sm"> ${
+                    <li>Glass Type: <button class="btn-glass btn btn-outline-success btn-sm"> ${
                        drink.strGlass
                     }</button></li>
                     <li class="iba">IBA: ${drink.strIBA}</li>
@@ -28,6 +54,8 @@ const printToDOM = (drink, ingredients) => {
                 </ul>
             </div>
         `;
+
+   //   * if drink."items" are null display none
    const ibaItem = document.querySelector(".iba");
    !drink.strIBA
       ? ibaItem.classList.add("hide")
@@ -37,6 +65,35 @@ const printToDOM = (drink, ingredients) => {
    !drink.strImageAttribution
       ? imgAtr.classList.add("hide")
       : imgAtr.classList.remove("hide");
+
+   //   * select buttons to filter cocktails  by pressing filters
+   const btnType = document.querySelector(".btn-type");
+   btnType.addEventListener("click", (e) => {
+      let alcValue = e.target.innerText;
+      alcValue = alcValue.replace(/\s+/g, "_");
+      console.log(alcValue);
+
+      fetch(
+         "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=" + alcValue
+      )
+         .then((resp) => resp.json())
+         .then((resp) => {
+            if (!resp.drinks) return;
+
+            document.querySelector(".result").innerHTML = resp.drinks
+               .map(
+                  (drink) => `
+                  <div class="cocktail col-4  border rounded p-4 hover" onclick="showCocktail(${drink.idDrink})">
+                     <img src="${drink.strDrinkThumb}" alt="${drink.strDrink}" />
+                     <div class="d-flex justify-content-between align-content-center align-items-center mt-2">
+                        <h3 class="mb-0">${drink.strDrink}</h3>   
+                        
+                     </div>
+                  </div> `
+               )
+               .join("");
+         });
+   });
 };
 
 // * function to work with ingredients from API
