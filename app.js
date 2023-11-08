@@ -8,7 +8,7 @@ Array.from(alphabet).forEach((letter) => {
    newDiv = document.createElement("div");
 
    // * Add the class 'col' to the new div
-   newDiv.classList.add("abc", "col", "border", "rounded", "py-0", "mw-2");
+   newDiv.classList.add("abc", "col", "border", "rounded", "py-0", "px-2");
 
    // * Set the inner text of the new div to the current letter
    newDiv.innerText = letter;
