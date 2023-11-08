@@ -41,16 +41,27 @@
       </style>
    </head>
    <body>
-      <div class="container my-5 d-flex flex-column align-items-center">
-         <form class="input-group w-50" onsubmit="searchCocktails(event)">
-            <input
-               type="text"
-               class="form-control"
-               placeholder="Enter cocktail name"
-            />
-            <div class="btn-group">
-               <button class="btn-search btn btn-success">Search</button>
-               <button type="reset" class="btn-lucky btn btn-outline-success">
+      <div
+         class="container my-5 d-flex flex-column align-items-center justify-content-center text-center"
+      >
+         <form
+            class="input-group w-50 d-flex justify-content-center"
+            onsubmit="searchCocktails(event)"
+         >
+            <div
+               class="btn-group d-flex justify-content-center align-items-center text-center w-100"
+            >
+               <input
+                  type="text"
+                  class="form-control w-100"
+                  placeholder="Enter cocktail name"
+               />
+
+               <button class="btn-search btn btn-success w-50">Search</button>
+               <button
+                  type="reset"
+                  class="btn-lucky btn btn-outline-success w-50"
+               >
                   I'm Lucky
                </button>
             </div>
