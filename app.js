@@ -1,9 +1,9 @@
-let lastKey;
-let value;
+// let lastKey;
+// let value;
 
-const checkLastKey = (key, value) => {
-   localStorage.setItem(key, value);
-};
+// const checkLastKey = (key, value) => {
+//    localStorage.setItem(key, value);
+// };
 
 // * Select the abc-wrap div
 const abcWrap = document.querySelector(".abc-wrap");
@@ -34,8 +34,8 @@ function searchByAlcoholType() {
          if (!resp.drinks) return;
 
          // * save fetch to localStorage
-         const toLocalStorage = JSON.stringify(resp.drinks);
-         checkLastKey("key", toLocalStorage);
+         // const toLocalStorage = JSON.stringify(resp.drinks);
+         // checkLastKey("key", toLocalStorage);
 
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
@@ -73,9 +73,10 @@ const filterBy = (val, x, filter) => {
          if (!resp.drinks) return;
 
          // * save fetch to localStorage
-         const toLocalStorage = JSON.stringify(resp.drinks);
-         checkLastKey("key", toLocalStorage);
-         checkLastKey("mem", "byLetorCat");
+         // const toLocalStorage = JSON.stringify(resp.drinks);
+         // checkLastKey("key", toLocalStorage);
+         // checkLastKey("mem", "byLetOrCat");
+
          // console.log(checkLastKey("cocktailsByLetter", toLocalStorage));
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
@@ -182,7 +183,7 @@ function searchCocktails(e) {
    e.preventDefault();
 
    const val = document.querySelector("input").value;
-   checkLastKey("inputVal", val);
+   // checkLastKey("inputVal", val);
 
    fetch("https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + val)
       .then((resp) => resp.json())
@@ -190,9 +191,9 @@ function searchCocktails(e) {
          if (!resp.drinks) return;
 
          // * save fetch to localStorage
-         const toLocalStorage = JSON.stringify(resp.drinks);
-         checkLastKey("key", toLocalStorage);
-         checkLastKey("mem", "bySearch");
+         // const toLocalStorage = JSON.stringify(resp.drinks);
+         // checkLastKey("key", toLocalStorage);
+         // checkLastKey("mem", "bySearch");
 
          document.querySelector(".result").innerHTML = resp.drinks
             .map(
@@ -222,9 +223,9 @@ function showCocktail(id) {
          const ingredients = [];
 
          // * save fetch to localStorage
-         const toLocalStorage = JSON.stringify(resp.drinks);
-         checkLastKey("key", toLocalStorage);
-         checkLastKey("mem", "byId");
+         // const toLocalStorage = JSON.stringify(resp.drinks);
+         // checkLastKey("key", toLocalStorage);
+         // checkLastKey("mem", "byId");
 
          drinkIngredients(drink, ingredients);
 
@@ -242,9 +243,9 @@ function imLucky() {
          if (!resp.drinks) return;
 
          // * save fetch to localStorage
-         const toLocalStorage = JSON.stringify(resp.drinks);
-         checkLastKey("key", toLocalStorage);
-         checkLastKey("mem", "byLucky");
+         // const toLocalStorage = JSON.stringify(resp.drinks);
+         // checkLastKey("key", toLocalStorage);
+         // checkLastKey("mem", "byLucky");
 
          const drink = resp.drinks[0];
          const ingredients = [];
@@ -261,13 +262,13 @@ btnLucky.addEventListener("click", (e) => {
    imLucky();
 });
 
-window.onload = () => {
-   const getKeyData = localStorage.getItem("key");
-   console.log(JSON.parse(getKeyData));
+// window.onload = () => {
+//    const getKeyData = localStorage.getItem("key");
+//    console.log(JSON.parse(getKeyData));
 
-   const getKeyMem = localStorage.getItem("mem");
-   console.log(getKeyMem);
+//    const getKeyMem = localStorage.getItem("mem");
+//    console.log(getKeyMem);
 
-   const getKeyVal = localStorage.getItem("inputVal");
-   console.log(getKeyVal);
-};
+//    const getKeyVal = localStorage.getItem("inputVal");
+//    console.log(getKeyVal);
+// };
